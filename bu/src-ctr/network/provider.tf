@@ -4,7 +4,7 @@
 ## GitHub environments and secrets is a prequisite
 variable "workspace_iam_roles" {
   default = {
-    src-ctr-dev = "arn:aws:iam::165729034722:role/veritas-terraform-deploy-role"
+    src-ctr-dev = "arn:aws:iam::xxxxx:role/terraform-deploy-role"
   }
 }
 
