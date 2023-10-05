@@ -1,0 +1,15 @@
+{
+  "central": {
+    "src-ctr": {
+      "account_id": "165729034722",
+      "lf_admin": "arn:aws:iam::165729034722:role/src-ctr-dev-gov-lake-formation-admin-role",
+      "catalogs": {
+        "cpap-report-analytics": {
+          "s3_bucket": "src-pdr-dev-cpap-report-analytics-us-east-1-705158173663",
+          "glue_db": "src-ctr-dev-gov-src-pdr-cpap-report-analytics",
+          "layer": "src-ctr-cpap-report-analytics"
+        }
+      }
+    }
+  }
+}

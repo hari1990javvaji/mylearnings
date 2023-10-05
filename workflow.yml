@@ -1,0 +1,118 @@
+# you need to pass the authorisation to use the environment secrets from the caller. which is why this file asks
+# for not just environment but also the secrets it would want from that environment. 
+# refer to https://github.com/orgs/community/discussions/25238#discussioncomment-3247035
+# For the things to be declared in the environment look at the vars used below.
+name: 'AWS Terraform Deployment'
+on:
+  workflow_call:
+    inputs:
+      action:
+        description: Terraform action to be performed.
+        type: string
+        default: plan
+      businessUnitName:
+        type: string
+        description: business unit name
+        default: src
+      pipelineName:
+        type: string
+        description: specific data pipeline or the purpose
+        default: co-report
+      envName:
+        description: The environment name to use
+        type: string
+        required: true
+      variablesFileName:
+        description: The variables file name to use
+        type: string
+        required: true
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        description: "AWS access key id"
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        description: "AWS secret access key"
+        required: true
+
+jobs:
+  terraform:
+    name: "Terraform Deployment"
+    runs-on: [self-hosted, linux, X64, philips]
+    environment: ${{ inputs.businessUnitName }}-${{ inputs.envName }}
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}      
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3.5.0
+
+      - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Get terraform version
+        id: terraform-info
+        run: echo "tf-version=$(cat .terraform-version)" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.3
+        with:
+          terraform_version: ${{ steps.terraform-info.outputs.tf-version }}
+          terraform_wrapper: false
+
+      - name: Scan with Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          framework: terraform
+        continue-on-error: true
+          
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config "encrypt=true" \
+            -backend-config "environments/${{ inputs.envName }}/backend.hcl" \
+        working-directory: ./bu/${{ inputs.businessUnitName }}/${{ inputs.pipelineName }}/
+        shell: bash
+        
+      - name: Terraform workspace
+        run: |
+          terraform workspace select -or-create=true  ${{ inputs.businessUnitName }}-${{ inputs.envName }}
+        working-directory: ./bu/${{ inputs.businessUnitName }}/${{ inputs.pipelineName }}/
+        shell: bash
+
+      - name: Terraform Plan
+        if: ${{ inputs.action == 'plan' }}
+        run: |
+          terraform plan -input=false -lock=true -out=plan_to_apply.tfplan \
+            -var-file=${{ inputs.variablesFileName }}
+        working-directory: ./bu/${{ inputs.businessUnitName }}/${{ inputs.pipelineName }}/
+        shell: bash
+        
+      - name: Terraform Apply
+        if: ${{ inputs.action == 'apply' }}
+        run: |
+          terraform apply -input=false -auto-approve -lock=true  \
+            -var-file=${{ inputs.variablesFileName }}
+        working-directory: ./bu/${{ inputs.businessUnitName }}/${{ inputs.pipelineName }}/
+        shell: bash
+        
+        ## destroy require to be executed twice. LF permission error when execueted for the first time. 
+      - name: Terraform destroy
+        if: ${{ inputs.action == 'destroy' }}
+        run: |
+          terraform destroy -input=false -auto-approve -lock=true  \
+            -var-file=${{ inputs.variablesFileName }}
+          terraform destroy -input=false -auto-approve -lock=true  \
+            -var-file=${{ inputs.variablesFileName }}
+        working-directory: ./bu/${{ inputs.businessUnitName }}/${{ inputs.pipelineName }}/
+        shell: bash
+  

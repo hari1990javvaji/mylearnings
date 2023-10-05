@@ -1,0 +1,186 @@
+{
+    "start": "-PT24H",
+    "periodOverride": "inherit",
+    "widgets": [
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "stat": "Sum",
+                "metrics": [
+                    [
+                        "AmazonMWAA",
+                        "SchedulerHeartbeat",
+                        "Environment",
+                        "${mwaa_env}",
+                        "Function",
+                        "Scheduler"
+                    ]
+                ],
+                "period": 300,
+                "region": "${region}",
+                "title": "Scheduler Heartbeat",
+                "legend": {
+                    "position": "bottom"
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 0,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "stat": "Average",
+                "metrics": [
+                    [
+                        "AmazonMWAA",
+                        "TaskInstanceFailures",
+                        "Task",
+                        "All",
+                        "Environment",
+                        "${mwaa_env}",
+                        "DAG",
+                        "All"
+                    ]
+                ],
+                "period": 300,
+                "region": "${region}",
+                "title": "Task Instance Failures",
+                "legend": {
+                    "position": "bottom"
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 6,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "stat": "Average",
+                "metrics": [
+                    [
+                        "AmazonMWAA",
+                        "TaskInstanceSuccesses",
+                        "Task",
+                        "All",
+                        "Environment",
+                        "${mwaa_env}",
+                        "DAG",
+                        "All"
+                    ]
+                ],
+                "period": 300,
+                "region": "${region}",
+                "title": "Task Instance Successes",
+                "legend": {
+                    "position": "bottom"
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 6,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "stat": "Average",
+                "metrics": [
+                    [
+                        "AmazonMWAA",
+                        "DagBagSize",
+                        "Environment",
+                        "${mwaa_env}",
+                        "Function",
+                        "DAG Processing"
+                    ]
+                ],
+                "period": 300,
+                "region": "${region}",
+                "title": "Dag Bag Size",
+                "legend": {
+                    "position": "bottom"
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 12,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "stat": "Average",
+                "metrics": [
+                    [
+                        "AmazonMWAA",
+                        "TotalParseTime",
+                        "Function",
+                        "DAG Processing",
+                        "Environment",
+                        "${mwaa_env}"
+                    ]
+                ],
+                "period": 300,
+                "region": "${region}",
+                "title": "Total Parse Time",
+                "legend": {
+                    "position": "bottom"
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 12,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "stat": "Maximum",
+                "metrics": [
+                    [
+                        "AmazonMWAA",
+                        "RunningTasks",
+                        "Environment",
+                        "${mwaa_env}",
+                        "Function",
+                        "Executor"
+                    ],
+                    [
+                        "AmazonMWAA",
+                        "QueuedTasks",
+                        "Environment",
+                        "${mwaa_env}",
+                        "Function",
+                        "Executor"
+                    ]
+                ],
+                "period": 300,
+                "region": "${region}",
+                "title": "Number of Running and Queued tasks",
+                "legend": {
+                    "position": "bottom"
+                }
+            }
+        }
+    ]
+}

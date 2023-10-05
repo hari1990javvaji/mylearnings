@@ -1,0 +1,14 @@
+{
+  "central": {
+    "src-ctr": {
+      "account_id": "165729034722",
+      "catalogs": {
+        "analytics": {
+          "s3_bucket": "src-pdr-dev-ad-score-analytics-us-east-1-705158173663",
+          "glue_db": "src-ctr-dev-gov-src-pdr-analytics",
+          "layer": "src-ctr-analytics"
+        }
+      }
+    }
+  }
+}

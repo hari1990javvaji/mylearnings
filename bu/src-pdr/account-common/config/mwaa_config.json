@@ -1,0 +1,21 @@
+{
+  "default_configs": {
+    "mwaa_env_class": "mw1.medium",
+    "mwaa_env_version": "2.4.3",
+    "webserver_access_mode": "PRIVATE_ONLY",
+    "max_workers": 1,
+    "min_workers": 1,
+    "logging_enabled": true,
+    "logging_level": "WARNING",
+    "dags_local_path": "./src/mwaa/common/dags/",
+    "req_file_local_path": "./src/mwaa/common/requirements.txt",
+    "plugins_local_path": "./src/mwaa/common/",
+    "airflow_configs": {}
+  },
+  "mwaa_envs": {
+    "daas": {
+      "webserver_access_mode": "PUBLIC_ONLY",
+      "max_workers": 2
+    }
+  }
+}

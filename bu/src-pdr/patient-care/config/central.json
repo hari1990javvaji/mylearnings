@@ -1,0 +1,15 @@
+{
+  "central": {
+    "src-ctr": {
+      "account_id": "165729034722",
+      "lf_admin": "arn:aws:iam::165729034722:role/src-ctr-dev-gov-lake-formation-admin-role",
+      "catalogs": {
+        "patient-care-analytics": {
+          "s3_bucket": "src-pdr-dev-patient-care-analytics-us-east-1-705158173663",
+          "glue_db": "src-ctr-dev-gov-src-pdr-patient-care-analytics",
+          "layer": "src-ctr-patient-care-analytics"
+        }
+      }
+    }
+  }
+}

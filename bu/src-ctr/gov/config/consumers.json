@@ -1,0 +1,21 @@
+{
+  "consumers": {
+    "src-cmr": {
+      "account_id": "942328815196",
+      "catalogs": {
+        "ad-score-analytics": {
+          "glue_db": "src-ctr-dev-gov-src-pdr-ad-score-analytics",
+          "layer": "src-cmr-ad-score-analytics"
+        },
+        "cpap-report-analytics": {
+          "glue_db": "src-ctr-dev-gov-src-pdr-cpap-report-analytics",
+          "layer": "src-cmr-cpap-report-analytics"
+        },
+        "patient-care-analytics": {
+          "glue_db": "src-ctr-dev-gov-src-pdr-patient-care-analytics",
+          "layer": "src-cmr-patient-care-analytics"
+        }
+      }
+    }
+  }
+}

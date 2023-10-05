@@ -1,0 +1,21 @@
+{
+  "producers": {
+    "src-pdr": {
+      "account_id": "705158173663",
+      "catalogs": {
+        "ad-score-analytics": {
+          "s3_bucket": "src-pdr-dev-ad-score-analytics-us-east-1-705158173663",
+          "layer": "src-pdr-ad-score-analytics"
+        },
+        "cpap-report-analytics": {
+          "s3_bucket": "src-pdr-dev-cpap-report-analytics-us-east-1-705158173663",
+          "layer": "src-pdr-cpap-report-analytics"
+        },
+        "patient-care-analytics": {
+          "s3_bucket": "src-pdr-dev-patient-care-analytics-us-east-1-705158173663",
+          "layer": "src-pdr-patient-care-analytics"
+        }
+      }
+    }
+  }
+}
