@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaskapp
+  namespace: database
+spec:
+  selector:
+    matchLabels:
+      app: flaskapp
+  template:
+    metadata:
+      labels:
+        app: flaskapp
+    spec:
+      containers:
+      - name: myapp
+        image: hjavvaji/flask-mongo-python:v1
+        env:
+        - name: MY_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: K8S_SERVICE_NAME
+          value: "mongodb-headless"
+        - name: MONGODB_HOSTNAME
+          value: "mongodbflask-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local"
+        - name: MONGODB_USERNAME
+          value: "mongodbuser"
+        - name: MONGODB_DATABASE
+          value: "philips"
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: mongodb-root-password
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000
+        securityContext:
+          allowPrivilegeEscalation: false
+        
